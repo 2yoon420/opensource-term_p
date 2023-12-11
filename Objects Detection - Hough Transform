@@ -1,0 +1,42 @@
+ Objects Detection - Hough Transform
+
+In order to detect a straight line, it is necessary to check whether pixels estimated as straight lines exist on a straight line. 
+Open-CV provides a function called Hough Transform, which is a technology used to process digital images and images. 
+The basic idea of Hough Transform is as follows.
+
+Principle of linear detection
+
+If a straight line that a point (x1,y1) can have is expressed as y1 = a*x1 + b, and this point can be expressed as a straight line such as b = -a*x1 + y1.
+That is, all straight lines that a point can have can be expressed as one straight line in space for b and a.
+If we replace the two points with equations for a and b, we get two straight lines in space ab.
+Then, what does the intersection of the two straight lines mean? It means a straight line passing through two points.
+This is because the straight line shown in space ab means all the straight lines that a point can have, 
+and the point where they meet in a1,b1 means a straight line that both points can have.
+
+Now, if you are targeting contours rather than two points, each number of points will be transferred to a number of straight lines in space ab, 
+and these straight lines will have many intersection points.
+And what that intersection means is a straight line that passes through those points in the xy space.
+In other words, one point in ab space means that it is also a straight line in xy space.
+Then, in the end, the more straight lines overlapping the intersection (a1,b1) of the straight lines, 
+the more likely the line y = a1*x + b1 exists in the image.
+Therefore, if the values of the storage space is higher than thresholds, it detects the direct line.
+
+Drawback and Hough Space
+
+However, if you actually use it, you can see that there is a problem.
+When actually implemented, the ab space is expressed as an 'array', and a and b corresponding to the straight line are accumulated and used.
+At this time, it can be seen that a problem arises when the straight line is parallel to the y-axis, that is, when the slope a is in the infinite range. 
+That is, problems arise when the array is 'limited' and the slope(a) is 'indefinite'.
+Therefore, we need to change 'infinite' to 'limited'. The method is 'Hough space'.
+The 'Hough space' uses an equation of a straight line of the polar coordinate system using ρ and θ.
+If the equation of the straight line in the form of y = ax + b is transformed as shown in the following figure, 
+it can be transformed into an equation of the straight line of the polar coordinate system of xcosθ + ysinθ = ρ. (picture_1)
+Converting the xy space into a ρθ space is expressed as a curve rather than a straight line. (picture_2)
+However, this is the same as the principle when the transformation from the xy space to the ab space.
+Just as the intersection point through which several straight lines pass is a straight line when the ab space is changed in the xy space,
+he straight line can be detected by finding a place where many curves formed when the points are converted into the ρθ space in the xy space.
+
+
+reference
+https://developer-lionhong.tistory.com/29
+https://95mkr.tistory.com/entry/OPENCV10#contents_1
